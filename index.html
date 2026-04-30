@@ -232,10 +232,7 @@
   <!-- SUB NAV Record A -->
   <div class="sub-nav-wrap" id="sub-recorda">
     <div class="sub-nav">
-      <button class="snav-btn active" id="sn-rd" onclick="switchPane('rd')" style="--c:var(--purple);--cb:rgba(139,92,246,0.2)">
-        <div class="snav-dot" style="background:var(--purple)"></div> Mode Domaines
-      </button>
-      <button class="snav-btn" id="sn-ri" onclick="switchPane('ri')" style="--c:var(--pink);--cb:rgba(236,72,153,0.2)">
+      <button class="snav-btn active" id="sn-ri" onclick="switchPane('ri')" style="--c:var(--pink);--cb:rgba(236,72,153,0.2)">
         <div class="snav-dot" style="background:var(--pink)"></div> Mode IP
       </button>
     </div>
@@ -318,39 +315,10 @@
     </div>
   </div>
 
-  <!-- RECORD A / DOMAINES -->
-  <div class="pane" id="pane-rd">
-    <div class="stats-bar">
-      <div class="stat-pill"><span class="val" id="rd-sl">0</span>&nbsp;lignes</div>
-      <div class="stat-pill"><span class="val" id="rd-sok" style="color:var(--green)">0</span>&nbsp;<span style="color:var(--green)">OK</span></div>
-      <div class="stat-pill"><span class="val" id="rd-ser" style="color:var(--red)">0</span>&nbsp;<span style="color:var(--red)">erreurs</span></div>
-    </div>
-    <div class="layout">
-      <div class="panel">
-        <div class="panel-header"><div class="panel-title">⬤ Entrée</div><span class="lc" id="rd-ic">0 ligne(s)</span></div>
-        <textarea id="rd-in" placeholder="domain1,domain2,domain_central&#10;domain3,domain4,domain_hub" spellcheck="false" style="min-height:300px"></textarea>
-        <div class="hint-text">Format : <span>domain1,domain2,domain_central</span></div>
-        <div class="panel-footer">
-          <button class="btn-purple" onclick="genDom('rd','recorda')">▶ Générer</button>
-          <button class="btn-clear" onclick="clrDom('rd')" title="Effacer">🗑</button>
-          <span class="shortcut-hint"><kbd>Ctrl</kbd>+<kbd>↵</kbd></span>
-        </div>
-      </div>
-      <div class="panel">
-        <div class="panel-header"><div class="panel-title">⬤ Résultat</div><span class="lc" id="rd-oc">0 ligne(s)</span></div>
-        <div class="error-banner" id="rd-eb"><span id="rd-ebt"></span></div>
-        <div class="output-body" id="rd-out">EMPTY</div>
-        <div class="panel-footer">
-          <button class="btn-copy btn-copy-disabled" id="rd-cb" onclick="doCopy('rd')">⎘ <span id="rd-cl">Copier tout</span></button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- RECORD A / IP -->
   <div class="pane" id="pane-ri">
     <div class="stats-bar">
-      <div class="stat-pill"><span class="val" id="ri-sd" style="color:var(--purple)">0</span>&nbsp;<span style="color:var(--purple)">domaine(s)</span></div>
+      <div class="stat-pill"><span class="val" id="ri-sd" style="color:var(--purple)">0</span>&nbsp;<span style="color:var(--purple)">ligne(s) domaine</span></div>
       <div class="stat-pill"><span class="val" id="ri-si" style="color:var(--pink)">0</span>&nbsp;<span style="color:var(--pink)">IP(s)</span></div>
       <div class="stat-pill"><span class="val" id="ri-sok" style="color:var(--green)">0</span>&nbsp;<span style="color:var(--green)">OK</span></div>
       <div class="stat-pill"><span class="val" id="ri-ser" style="color:var(--red)">0</span>&nbsp;<span style="color:var(--red)">erreurs</span></div>
@@ -360,9 +328,9 @@
         <div class="panel-header"><div class="panel-title">⬤ Entrée</div></div>
         <div class="input-section">
           <div class="field-block">
-            <div class="flb"><span class="fl">Domaine(s) central</span><span class="ft" id="ri-dc" style="background:rgba(139,92,246,.1);color:var(--purple)">0 domaine(s)</span></div>
-            <textarea id="ri-dom" placeholder="example.com&#10;company.org" spellcheck="false" style="min-height:100px"></textarea>
-            <div class="hint-text">Un domaine par ligne</div>
+            <div class="flb"><span class="fl">Domaine central</span><span class="ft" id="ri-dc" style="background:rgba(139,92,246,.1);color:var(--purple)">0 ligne(s)</span></div>
+            <textarea id="ri-dom" placeholder="domain.com,domain.com&#10;domain.com,subdom.domain.com" spellcheck="false" style="min-height:100px"></textarea>
+            <div class="hint-text">Format obligatoire : <span>domain,domain</span> ou <span>domain,subdom.domain</span></div>
           </div>
           <div class="field-block">
             <div class="flb"><span class="fl">Adresses IP</span><span class="ft" id="ri-ic" style="background:rgba(236,72,153,.1);color:var(--pink)">0 / 50</span></div>
@@ -481,9 +449,9 @@ function setTheme(t){
 
 /* ══ NAVIGATION ══ */
 // Which pane is default per menu
-const menuDefaults={include:'id',recorda:'rd',cleaner:'cleaner'};
-const paneToMenu={id:'include',ii:'include',rd:'recorda',ri:'recorda',cleaner:'cleaner'};
-const paneToSub={id:'sn-id',ii:'sn-ii',rd:'sn-rd',ri:'sn-ri'};
+const menuDefaults={include:'id',recorda:'ri',cleaner:'cleaner'};
+const paneToMenu={id:'include',ii:'include',ri:'recorda',cleaner:'cleaner'};
+const paneToSub={id:'sn-id',ii:'sn-ii',ri:'sn-ri'};
 let activeMenu=null,activePane='id';
 
 // Init empties
@@ -609,7 +577,7 @@ function clrDom(p){
 }
 
 // Live count
-['id-in','rd-in'].forEach(id=>{
+['id-in'].forEach(id=>{
   const el=document.getElementById(id);if(!el)return;
   const p=id.split('-')[0];
   el.addEventListener('input',()=>{
@@ -622,10 +590,33 @@ function clrDom(p){
 });
 
 /* ══ MODE IP — SHARED ══ */
-function validateIP(p,domains,ips,maxIP){
+function isValidDomainName(d){
+  return /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/.test(d);
+}
+
+function parseRecordAPairs(lines){
+  return lines.map((line,i)=>{
+    const pts=line.split(',').map(x=>x.trim()).filter(Boolean);
+    if(pts.length!==2) return {ok:false,line,i,msg:`Ligne ${i+1} invalide : "${line}" → format obligatoire : domain,domain ou domain,subdom.domain`};
+    const [base,target]=pts;
+    if(!isValidDomainName(base)) return {ok:false,line,i,msg:`Ligne ${i+1} — domaine invalide : "${base}"`};
+    if(!isValidDomainName(target)) return {ok:false,line,i,msg:`Ligne ${i+1} — domaine/subdomaine invalide : "${target}"`};
+    return {ok:true,base:base.toLowerCase(),target:target.toLowerCase(),raw:`${base.toLowerCase()},${target.toLowerCase()}`};
+  });
+}
+
+function validateIP(p,domains,ips,maxIP,mode){
   const errs=[];
-  if(!domains.length) errs.push('Domaine obligatoire — saisissez au moins un domaine central.');
-  getDups(domains).forEach(d=>errs.push(`Doublon domaine : "${d}" — supprimez les doublons.`));
+  if(!domains.length) errs.push(mode==='recorda'
+    ? 'Domaine obligatoire — ajoutez au moins une ligne : domain,domain ou domain,subdom.domain.'
+    : 'Domaine obligatoire — saisissez au moins un domaine central.');
+  if(mode==='recorda'){
+    const parsed=parseRecordAPairs(domains);
+    parsed.filter(x=>!x.ok).forEach(x=>errs.push(x.msg));
+    getDups(parsed.filter(x=>x.ok).map(x=>x.raw)).forEach(d=>errs.push(`Doublon domaine : "${d}" — supprimez les doublons.`));
+  } else {
+    getDups(domains).forEach(d=>errs.push(`Doublon domaine : "${d}" — supprimez les doublons.`));
+  }
   if(!ips.length) errs.push('Aucune adresse IP saisie.');
   if(ips.length>maxIP) errs.push(`Limite dépassée : ${ips.length} IPs — maximum ${maxIP}.`);
   if(ips.length>0&&ips.length<=maxIP){
@@ -638,26 +629,33 @@ function validateIP(p,domains,ips,maxIP){
 function genIP(p,mode,maxIP){
   const domains=getLines(p+'-dom'),ips=getLines(p+'-ip');
   store[p]=[];
-  const errs=validateIP(p,domains,ips,maxIP);
+  const errs=validateIP(p,domains,ips,maxIP,mode);
   if(errs.length){
     renderRows(p+'-out',errs.map(t=>({cls:'err',text:t})));
     setStats(p,0,errs.length);setOutputCount(p,0);hideEB(p);enableCopy(p,false);return;
   }
-  const ipStr=ips.map(ip=>`ip4:${ip}`).join(' ');
-  const rows=domains.map((dom,i)=>{
-    let txt;
-    if(mode==='include') txt=`${dom},${dom},TXT,"v=spf1 ${ipStr} -all"`;
-    else txt=`${dom},${dom},TXT,Arecords:${ips.join(';')}`;
-    store[p].push(txt);return{cls:'ok',text:txt,num:i+1};
-  });
-  renderRows(p+'-out',rows);setStats(p,domains.length,0);setOutputCount(p,domains.length);hideEB(p);enableCopy(p,true);
+  const rows=[];
+  if(mode==='include'){
+    const ipStr=ips.map(ip=>`ip4:${ip}`).join(' ');
+    domains.forEach((dom,i)=>{
+      const txt=`${dom},${dom},TXT,"v=spf1 ${ipStr} -all"`;
+      store[p].push(txt);rows.push({cls:'ok',text:txt,num:i+1});
+    });
+  } else {
+    const parsed=parseRecordAPairs(domains).filter(x=>x.ok);
+    parsed.forEach((item,i)=>{
+      const txt=`${item.base},${item.target},TXT,Arecords:${ips.join(';')}`;
+      store[p].push(txt);rows.push({cls:'ok',text:txt,num:i+1});
+    });
+  }
+  renderRows(p+'-out',rows);setStats(p,rows.length,0);setOutputCount(p,rows.length);hideEB(p);enableCopy(p,true);
   document.getElementById(p+'-cl').textContent='Copier tout';document.getElementById(p+'-cb').classList.remove('copied');
 }
 
 function clrIP(p,maxIP){
   document.getElementById(p+'-dom').value='';document.getElementById(p+'-ip').value='';
   setEmpty(p+'-out');store[p]=[];
-  document.getElementById(p+'-dc').textContent='0 domaine(s)';
+  document.getElementById(p+'-dc').textContent=p==='ri'?'0 ligne(s)':'0 domaine(s)';
   document.getElementById(p+'-ic').textContent=`0 / ${maxIP}`;
   document.getElementById(p+'-ic').style.color='';
   setOutputCount(p,0);hideEB(p);enableCopy(p,false);setStats(p,0,0);
@@ -671,7 +669,7 @@ function clrIP(p,maxIP){
   const ipEl=document.getElementById(p+'-ip');
   if(domEl) domEl.addEventListener('input',()=>{
     const n=getLines(p+'-dom').length;
-    document.getElementById(p+'-dc').textContent=`${n} domaine(s)`;
+    document.getElementById(p+'-dc').textContent=p==='ri'?`${n} ligne(s)`: `${n} domaine(s)`;
     if(document.getElementById(p+'-sd')) document.getElementById(p+'-sd').textContent=n;
   });
   if(ipEl) ipEl.addEventListener('input',()=>{
